@@ -39,6 +39,17 @@ int main()
   {
     return -2;
   }
+
+  //publish a message
+  std_msgs__msg__Float32 msg;
+  msg.data = 11.22;
+  return_code = rcl_publish(&publisher, &message, NULL);
+  while(return_code != RCL_RET_OK)
+  {
+    // try to publish untill success
+    return_code = rcl_publish(&publisher, &message, NULL);
+  }
+
   // cleanup
   
   rcl_publisher_fini(&publisher, &node);
