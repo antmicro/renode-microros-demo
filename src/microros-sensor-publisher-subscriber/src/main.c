@@ -57,19 +57,24 @@ int main()
   }
 
   //publish a message
-  std_msgs__msg__Float64 msg;
-  msg.data = 11.22;
-  return_code = rcl_publish(&publisher, &msg, NULL);
-  while(return_code != RCL_RET_OK)
+  std_msgs__msg__Float64* msg = (std_msgs__msg__Float64*)malloc(sizeof(std_msgs__msg__Float64)); 
+  (*msg).data = 11.22;
+  return_code = rcl_publish(&publisher, msg, NULL);
+  for(int i=0;i<1000;i++)
   {
-    // try to publish untill success
-    return_code = rcl_publish(&publisher, &msg, NULL);
+    while(return_code != RCL_RET_OK)
+    {
+      // try to publish untill success
+      return_code = rcl_publish(&publisher, msg, NULL);
+    }
+        
+    (*msg).data = 11.22;
+    usleep(1000000);
+    return_code += 1; // For testing, so that the while() executes again
   }
-
   // cleanup
-  printf("Cleaning up\n");
   rcl_publisher_fini(&publisher, &node);
   rcl_node_fini(&node);
-
+  free(msg);
   return 0;
 }
