@@ -9,11 +9,22 @@
 #include <unistd.h>
 #include <time.h>
 
+#include <rmw_microros/rmw_microros.h>
+#include <microros_transports.h>
+
 #include <zephyr.h>
 
 int main()
 {
   // add all initializations: allocator, support and node
+  rmw_uros_set_custom_transport(
+    MICRO_ROS_FRAMING_REQUIRED,
+    &default_params,
+    zephyr_transport_open,
+    zephyr_transport_close,
+    zephyr_transport_write,
+    zephyr_transport_read
+	);
   
   rcl_allocator_t def_allocator = rcl_get_default_allocator();
   rclc_support_t support;
