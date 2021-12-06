@@ -6,7 +6,7 @@ $name?="STM32F4_Discovery"
 mach create $name
 machine LoadPlatformDescription @platforms/boards/stm32f4_discovery-kit.repl
 cpu PerformanceInMips 125
-$bin?=@./zephyr.elf
+$bin?=@../zephyr.elf
 emulation CreateUartPtyTerminal "term0" $ORIGIN/uart
 
 # showAnalyzer sysbus.uart2
@@ -14,7 +14,6 @@ connector Connect sysbus.uart2 term0
 macro reset
 """
     sysbus LoadELF $bin
-    machine Start
 """
 runMacro $reset
 
