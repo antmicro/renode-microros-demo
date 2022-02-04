@@ -28,6 +28,28 @@ unsigned long long dev_id=0;
 std_msgs__msg__Float64MultiArray msg, incoming;
 rcl_publisher_t publisher;
 
+void subscriber_callback(const void * m)
+{
+	const std_msgs__msg__Float64MultiArray * rcv = (const std_msgs__msg__Float64MultiArray *) m;
+	if(rcv->data.data[0] != *((double*) &dev_id))
+		printk("Data frame from id %llx: %llx\n", *((unsigned long long*)&(rcv->data.data[0])), *((unsigned long long*)&(rcv->data.data[1])));
+	else
+		printk("Got my own or corrupted message\n");
+}
+
+void publisher_timer_callback()
+{
+	msg.data.data[0] = *((double*) &dev_id);
+	msg.data.data[1] = (double) 11.22;
+	rcl_ret_t return_code = RCL_RET_OK + 1;
+	while(return_code != RCL_RET_OK)
+	{
+		return_code = rcl_publish(&publisher, &msg, NULL);
+		printk("Sending message ");
+		printk("id %llx, data %llx\n",  *((unsigned long long*)&(msg.data.data[0])), *((unsigned long long*)&(msg.data.data[1])));
+	}
+}
+
 void allocate_float64multiarray_msg_to_spec(std_msgs__msg__Float64MultiArray* m)
 {
 	m->data.capacity = 2;
@@ -93,24 +115,37 @@ int main()
 	if(return_code != RCL_RET_OK)
 		return return_code;
 
-  //publish a message
-  std_msgs__msg__Float64* msg = (std_msgs__msg__Float64*)malloc(sizeof(std_msgs__msg__Float64)); 
-  (*msg).data = 11.22;
-  return_code = rcl_publish(&publisher, msg, NULL);
-  for(int i=0;i<1000;i++)
-  {
-    do
-    {
-      // try to publish untill success
-      return_code = rcl_publish(&publisher, msg, NULL);
-    }while (return_code != RCL_RET_OK);
-        
-    (*msg).data = 11.22;
-    usleep(1000000);
-  }
-  // cleanup
-  rcl_publisher_fini(&publisher, &node);
-  rcl_node_fini(&node);
-  free(msg);
-  return 0;
+	rclc_subscription_init_best_effort(
+		&subscriber,
+		&node,
+		ROSIDL_GET_MSG_TYPE_SUPPORT(std_msgs, msg, Float64MultiArray),
+		topic_name
+	);
+
+
+	rclc_executor_t executor;
+	
+	rclc_executor_init(
+		&executor,
+		&support.context,
+		2,
+		&def_allocator
+	);
+	rclc_executor_add_timer(&executor, &timer);
+	rclc_executor_add_subscription(
+		&executor,
+		&subscriber,
+		&incoming,
+		&subscriber_callback,
+		ON_NEW_DATA
+	);
+	while(1)
+	{
+		rclc_executor_spin_some(&executor, RCL_MS_TO_NS(100));
+		usleep(100000);
+	}
+
+	rcl_publisher_fini(&publisher, &node);
+	rcl_node_fini(&node);
+	return 0;
 }
