@@ -1,0 +1,7 @@
+using "platforms/boards/stm32f4_discovery.repl"
+using "platforms/boards/stm32f4_discovery-additional_gpios.repl"
+using "platforms/boards/stm32f4_discovery-bb.repl"
+pllC: Python.PythonPeripheral @ sysbus 0x70006080
+    size: 0x4
+    initable: true
+    script: "import random; request.value = random.randint(0,0xFFFFFFFF)"
