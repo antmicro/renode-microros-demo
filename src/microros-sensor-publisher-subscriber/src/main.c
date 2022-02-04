@@ -50,6 +50,9 @@ void allocate_float64multiarray_msg_to_spec(std_msgs__msg__Float64MultiArray* m)
 int main()
 {
 	rcl_allocator_t def_allocator = rcl_get_default_allocator();
+	// Device ID generation from PyDev
+	dev_id = (unsigned long long)*((unsigned*)(0x70006080));
+	printk("Device ID: %llx\n", *((unsigned long long*)(&dev_id)));
 	allocate_float64multiarray_msg_to_spec(&msg);
 	allocate_float64multiarray_msg_to_spec(&incoming);
 	// add all initializations: allocator, support and node
