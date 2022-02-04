@@ -74,8 +74,9 @@ add_library(microroslib STATIC IMPORTED GLOBAL)
 add_dependencies(
   microroslib
   microroslib_project
+  micro_ros_utilities
   )
-
+add_library(micro_ros_utilities STATIC IMPORTED GLOBAL)
 add_dependencies(microroslib_project offsets_h)
 
 set_target_properties(microroslib PROPERTIES IMPORTED_LOCATION             ${MICROROS_LIB_DIR}/libmicroros.a)
