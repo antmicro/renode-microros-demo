@@ -1,7 +1,7 @@
 #include <memory>
 
 #include "rclcpp/rclcpp.hpp"
-#include "std_msgs/msg/float64.hpp"
+#include "std_msgs/msg/float64_multi_array.hpp"
 using std::placeholders::_1;
 
 class Subscriber : public rclcpp::Node
@@ -9,7 +9,7 @@ class Subscriber : public rclcpp::Node
     public:
         Subscriber() : Node("Subscriber")
         {
-            subscription_ = this->create_subscription<std_msgs::msg::Float64>(
+            subscription_ = this->create_subscription<std_msgs::msg::Float64MultiArray>(
                 "default_namespace/microros_sensor_topic",
                 10,
                 std::bind(
@@ -20,14 +20,16 @@ class Subscriber : public rclcpp::Node
             );
         }
     private:
-        void topic_callback(const std_msgs::msg::Float64::SharedPtr msg) const
+        void topic_callback(const std_msgs::msg::Float64MultiArray::SharedPtr msg) const
         {
+            std::vector<double> recv_data = msg->data;
             printf(
-                "Got from MicroROS: '%lf'\n",
-                msg->data
+                "Got from MicroROS ID %llx: '%lf'\n",
+                *((unsigned long long*)&recv_data[0]),
+                recv_data[1]
             );
         }
-        rclcpp::Subscription<std_msgs::msg::Float64>::SharedPtr subscription_;
+        rclcpp::Subscription<std_msgs::msg::Float64MultiArray>::SharedPtr subscription_;
 };
 
 int main(int argc, char * argv[])
