@@ -39,10 +39,7 @@ int main()
 
   return_code = rclc_node_init_default(&node, node_name, namespace, &support);
   if(return_code != RCL_RET_OK)
-  {
-    // TODO: Add some sort of error handling
-    return -1;
-  }
+    return return_code;
 
   return_code = rclc_publisher_init_default(
       &publisher,
@@ -52,9 +49,7 @@ int main()
   );
   
   if(return_code != RCL_RET_OK)
-  {
-    return -2;
-  }
+	return return_code;
 
   //publish a message
   std_msgs__msg__Float64* msg = (std_msgs__msg__Float64*)malloc(sizeof(std_msgs__msg__Float64)); 
@@ -62,15 +57,14 @@ int main()
   return_code = rcl_publish(&publisher, msg, NULL);
   for(int i=0;i<1000;i++)
   {
-    while(return_code != RCL_RET_OK)
+    do
     {
       // try to publish untill success
       return_code = rcl_publish(&publisher, msg, NULL);
-    }
+    }while (return_code != RCL_RET_OK);
         
     (*msg).data = 11.22;
     usleep(1000000);
-    return_code += 1; // For testing, so that the while() executes again
   }
   // cleanup
   rcl_publisher_fini(&publisher, &node);
