@@ -140,10 +140,7 @@ int main()
 		ON_NEW_DATA
 	);
 	while(1)
-	{
-		rclc_executor_spin_some(&executor, RCL_MS_TO_NS(100));
-		usleep(100000);
-	}
+		rclc_executor_spin_some(&executor, RCL_MS_TO_NS(250));
 
 	rcl_publisher_fini(&publisher, &node);
 	rcl_node_fini(&node);
