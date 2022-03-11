@@ -7,9 +7,9 @@ mach create $name
 machine LoadPlatformDescription $ORIGIN/stm32f4_discovery-kit.repl
 cpu PerformanceInMips 125
 emulation CreateUartPtyTerminal "term0" $ORIGIN/uart
-showAnalyzer sysbus.uart2
-showAnalyzer sysbus.uart1
-connector Connect sysbus.uart1 term0
+showAnalyzer sysbus.usart2
+showAnalyzer sysbus.usart1
+connector Connect sysbus.usart1 term0
 macro reset
 """
     sysbus LoadELF $ORIGIN/zephyr.elf
