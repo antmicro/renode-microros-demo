@@ -8,6 +8,6 @@ cd ..
 
 pkill micro_ros_agent
 rm -f ./renode/uart
-ros2 run micro_ros_agent micro_ros_agent serial --dev ./renode/uart 2>&1 1>/dev/null&
+ros2 run micro_ros_agent micro_ros_agent serial --dev ./renode/uart &
 ros2 run subscriber subscriber_node
 
