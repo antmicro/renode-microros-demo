@@ -15,4 +15,6 @@ macro reset
     sysbus LoadELF $ORIGIN/zephyr.elf
 """
 runMacro $reset
+# hush nvic warnings
+logLevel 3 nvic
 
