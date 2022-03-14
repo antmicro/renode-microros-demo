@@ -1,9 +1,11 @@
 #!/bin/bash
 
 source /opt/ros/$ROS_DISTRO/setup.bash
-mkdir microros_ws
-cd microros_ws
+mkdir microros_ws_renode-micro-ros-demo
+cd microros_ws_renode-micro-ros-demo
 git clone -b $ROS_DISTRO https://github.com/micro-ROS/micro_ros_setup.git src/micro_ros_setup
+apt update
+apt-get install -y python3-pip wget
 rosdep update
 rosdep install --from-path src --ignore-src -y
 colcon build
@@ -29,4 +31,5 @@ mkdir src
 cp -r ../../src/ros2-sensor-subscriber src/
 colcon build
 cd ..
-
+cd ..
+cp microros_ws_renode-micro-ros-demo/firmware/build/zephyr/zephyr.elf ./renode
