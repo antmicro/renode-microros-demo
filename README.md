@@ -18,8 +18,6 @@ The `run_ros2_communication_demo.bash` script is responsible for launching the m
 
 ## Building and running the demo
 
-### Download and build the demo packages and dependencies
-
 1. Clone the repository:
 
     ```(bash)
