@@ -10,11 +10,14 @@ Renode allows for hardware-less development of embedded systems and supports det
 
 For ease of use, a build and run script is provided, automating the process of getting the firmware built and all the tools launched properly for the demo. 
 
-For manual demonstration, we chose to run the micro-ROS to ROS 2 test case as it provides clear output if everything functions correctly within the system, unlike the micro-ROS to micro-ROS demo which relies on reading Renode's UART monitors to get the confirmation that everything is operational. In terms of checking the functionality used as such, the two are very closely related.
+For manual demonstration, we chose to run the micro-ROS to ROS 2 test case as it provides clear output if everything functions correctly within the system, unlike the micro-ROS to micro-ROS demo which relies on reading Renode's UART monitors to get the confirmation that everything is operational.
+In terms of checking the functionality used as such, the two are very closely related.
 
-The repository contains files for a micro-ROS to micro-ROS communication setup alongside Robot Framework test files (`.robot`) that will launch the required tests automatically. Make sure to run the robot files from within the Docker container referenced in the instructions below, and remember to run `build.bash` first to create all the necessary packages.
+The repository contains files for a micro-ROS to micro-ROS communication setup alongside Robot Framework test files (`.robot`) that will launch the required tests automatically.
+Make sure to run the robot files from within the Docker container referenced in the instructions below, and remember to run `build.bash` first to create all the necessary packages.
 
-The `run_ros2_communication_demo.bash` script is responsible for launching the mentioned agent and the ROS 2 subscriber package in the correct order. There is some sourcing of installations to be done before launching, which is handled by the script.
+The `run_ros2_communication_demo.bash` script is responsible for launching the mentioned agent and the ROS 2 subscriber package in the correct order.
+There is some sourcing of installations to be done before launching, which is handled by the script.
 
 ## Building and running the demo
 
@@ -65,6 +68,7 @@ The `run_ros2_communication_demo.bash` script is responsible for launching the m
     ```(bash)
     renode -e "s @./renode/first_instance.resc"
     ```
-9. The ROS 2 application in the second container shell and the micro-ROS application running in the first container shell should establish a connection. The log in the ROS 2 application should contain:
+9. The ROS 2 application in the second container shell and the micro-ROS application running in the first container shell should establish a connection.
+   The log in the ROS 2 application should contain:
 
     `Got from Micro-ROS ID <random device ID>: <received data>`
