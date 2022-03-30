@@ -40,7 +40,7 @@ There is some sourcing of installations to be done before launching, which is ha
     ```
 4. Get Renode in the Docker container - the most convenient way is to get the latest portable release, extract it and add the executable to the PATH variable
     ```(bash)
-    wget https://builds.renode.io/renode-latest.linux-portable.tar. gz
+    wget https://builds.renode.io/renode-latest.linux-portable.tar.gz
     tar -xvf renode-latest.linux-portable.tar.gz
     mv renode_* renode_portable
     export PATH=/renode_portable:$PATH
