@@ -2,14 +2,13 @@
 :description: This script runs MicroROS test on STM32F4 Discovery.
 
 using sysbus
-$name?="STM32F4_Discovery"
-mach create $name
+mach create "stm32-1"
+mach set "stm32-1"
 machine LoadPlatformDescription $ORIGIN/stm32f4_discovery-kit.repl
 cpu PerformanceInMips 125
-emulation CreateUartPtyTerminal "term0" $ORIGIN/uart
 showAnalyzer sysbus.usart2
 showAnalyzer sysbus.usart1
-connector Connect sysbus.usart1 term0
+connector Connect sysbus.usart1 uartHub
 macro reset
 """
     sysbus LoadELF $ORIGIN/zephyr.elf

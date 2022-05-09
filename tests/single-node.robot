@@ -6,22 +6,25 @@ Resource        ${RENODEKEYWORDS}
 
 *** Test Cases ***
 Should Print DeviceID
+    Execute Script              ${CURDIR}/../renode/zynq.resc
     Execute Script              ${CURDIR}/../renode/first_instance.resc
-    Create Terminal Tester      sysbus.usart2
+    Create Terminal Tester      sysbus.usart2        machine=stm32-1
     Start Emulation
-    Wait For Next Line On Uart  20
+    Wait For Next Line On Uart  30
     Teardown
 Should Wait For Handshake
+    Execute Script              ${CURDIR}/../renode/zynq.resc
     Execute Script              ${CURDIR}/../renode/first_instance.resc
-    Create Terminal Tester      sysbus.usart1
-    Create Terminal Tester      sysbus.usart2
+    Create Terminal Tester      sysbus.usart1        machine=stm32-1
     Start Emulation
-    Wait For Prompt On Uart     ~   0   20
+    Wait For Prompt On Uart     ~   0   20 
 Should Start Sending Messages
-    ${agent}=                   Start Process		        ${CURDIR}/../renode/start_agent.sh    ${CURDIR}/../renode	shell=True	stdout=${CURDIR}/../renode/out.txt    stderr=${CURDIR}/../renode/err.txt 
-    Execute Script              ${CURDIR}/../renode/first_instance.resc
-    Create Terminal Tester      sysbus.usart1
-    Create Terminal Tester      sysbus.usart2
+    Execute Script              ${CURDIR}/../renode/zynq.resc
+    Create Terminal Tester      sysbus.uart1
     Start Emulation
-    Wait For Line On Uart       Sending .{1,}  15  1  treatAsRegex=true
-    Terminate Process           ${agent}
+    Sleep                       130
+    Execute Script              ${CURDIR}/../renode/first_instance.resc
+    Start Emulation
+    Create Terminal Tester      sysbus.usart2        machine=stm32-1
+    Wait For Line On Uart       Sending .{1,}       15      testerId=1      treatAsRegex=true
+
