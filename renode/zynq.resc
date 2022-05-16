@@ -31,4 +31,6 @@ macro reset
 
 runMacro $reset
 emulation CreateUARTHub "uartHub"
+emulation CreateUARTHub "uartHub2"
 connector Connect sysbus.uart0 uartHub
+connector Connect sysbus.uart1 uartHub2

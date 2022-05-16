@@ -1,18 +1,17 @@
 :name: STM32F4 Discovery
-:description: This script runs Contiki on STM32F4 Discovery.
+:description: This script runs MicroROS test on STM32F4 Discovery.
 
 using sysbus
-$name?="STM32F4_Discovery"
-mach create $name
+mach create "stm32-2"
+mach set "stm32-2"
 machine LoadPlatformDescription $ORIGIN/stm32f4_discovery-kit.repl
 cpu PerformanceInMips 125
-emulation CreateUartPtyTerminal "term0" $ORIGIN/uart1
 showAnalyzer sysbus.usart2
 showAnalyzer sysbus.usart1
-connector Connect sysbus.usart1 term0
+connector Connect sysbus.usart1 uartHub2
 macro reset
 """
     sysbus LoadELF $ORIGIN/zephyr.elf
 """
 runMacro $reset
-
+uartHub2 Start
