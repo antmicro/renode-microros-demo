@@ -19,7 +19,7 @@ Should Receive A Message
     Wait For Prompt On Uart     root@zedboard-zynq7:~#      timeout=150         testerId=0
     Write Line To Uart          . /usr/share/subscriber/local_setup.sh          testerId=0
     Wait For Prompt On Uart     root@zedboard-zynq7:~#      timeout=150         testerId=0
-    Write Line To Uart          export ROS_DOMAIN_ID=10                         testerId=0
+    Write Line To Uart          export ROS_DOMAIN_ID=0                         testerId=0
     Wait For Prompt On Uart     root@zedboard-zynq7:~#      timeout=150         testerId=0
     Write Line To Uart          export RMW_IMPLEMENTATION=rmw_fastrtps_cpp      testerId=0
     Wait For Prompt On Uart     root@zedboard-zynq7:~#      timeout=150         testerId=0
