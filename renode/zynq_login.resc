@@ -13,7 +13,7 @@ ttc0 SetFrequency 2 33333333
 ttc1 SetFrequency 0 33333333
 ttc1 SetFrequency 1 33333333
 ttc1 SetFrequency 2 33333333
-virtio LoadImage $ORIGIN/zynq_micro_ros_agents_hush_rootfs.img  true
+virtio LoadImage $ORIGIN/zynq_micro_ros_agent_rootfs.img  true
 
 macro reset
 """
@@ -25,7 +25,7 @@ macro reset
 
     ### load binaries ###
     sysbus LoadELF $ORIGIN/zynq-virtio-vmlinux
-    sysbus LoadFdt $ORIGIN/zed.dtb 0x100 "console=/dev/null,115200 root=/dev/vda rw"
+    sysbus LoadFdt $ORIGIN/zed.dtb 0x100 "console=/dev/ttyPS0,115200 root=/dev/vda rw earlyprintk"
 
 """
 
