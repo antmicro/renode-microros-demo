@@ -24,4 +24,4 @@ Should Receive A Message
     Write Line To Uart          export RMW_IMPLEMENTATION=rmw_fastrtps_cpp      testerId=0
     Wait For Prompt On Uart     root@zedboard-zynq7:~#      timeout=150         testerId=0
     Write Line To Uart          ros2 run subscriber subscriber_node             testerId=0
-    Wait For Line On Uart       Got from                    60                  testerId=0    treatAsRegex=true
+    Wait For Line On Uart       Got from                    150                  testerId=0    treatAsRegex=true
