@@ -7,6 +7,7 @@ Resource        ${RENODEKEYWORDS}
 *** Test Cases ***
 Should Receive A Message
     Execute Script              ${CURDIR}/../renode/zynq.resc
+    Execute Command       emulation SetGlobalSerialExecution true
     Create Terminal Tester      sysbus.uart1
     Create Terminal Tester      sysbus.uart0
     Start Emulation
