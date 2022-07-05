@@ -5,20 +5,24 @@ Test Teardown   Test Teardown
 Resource        ${RENODEKEYWORDS}
 
 *** Test Cases ***
-Should Receive Messages On ROS2
-    ${agent}=                       Start Process		        ${CURDIR}/../renode/start_agent.sh     ${CURDIR}/../renode   	shell=True      stdout=${CURDIR}/../renode/out.txt    stderr=${CURDIR}/../renode/err.txt 
-    Execute Script                  ${CURDIR}/../renode/first_instance.resc
-    Create Terminal Tester          sysbus.usart1
-    Create Terminal Tester          sysbus.usart2
-    Start Emulation 
-    Wait For Line On Uart           Sending .{1,}  15  1  treatAsRegex=true
-    ${receiver_handle}=             Start Process               stdbuf -oL ros2 run subscriber subscriber_node    stdout=${CURDIR}/../renode/ros_out.txt   shell=True
-    Wait Until Keyword Succeeds     60 sec      1 sec           File Should Contain     Got from MicroROS .{1,}   ${CURDIR}/../renode/ros_out.txt
-    Log To Console                  Processed Match
-    Terminate Process               ${agent}
-
-*** Keywords ***
-File Should Contain 
-    [Arguments]                     ${regex}                    ${filename}
-    ${result}=                      Run Process                 cat ${filename}     shell=True
-    Should Match Regexp             ${result.stdout}            ${regex}
+Should Receive A Message
+    Execute Script              ${CURDIR}/../renode/zynq_login.resc
+    Execute Command       emulation SetGlobalSerialExecution true
+    Start Emulation
+    Create Terminal Tester      sysbus.uart1
+    Create Terminal Tester      sysbus.uart0
+    Wait For Prompt On Uart     login:                      timeout=150         testerId=0
+    Write Line To Uart          root                                            testerId=0
+    Execute Script              ${CURDIR}/../renode/first_instance.resc
+    Start Emulation
+    Wait For Prompt On Uart     root@zedboard-zynq7:~#      timeout=150         testerId=0
+    Write Line To Uart          . /usr/bin/ros_setup.sh                         testerId=0
+    Wait For Prompt On Uart     root@zedboard-zynq7:~#      timeout=150         testerId=0
+    Write Line To Uart          . /usr/share/subscriber/local_setup.sh          testerId=0
+    Wait For Prompt On Uart     root@zedboard-zynq7:~#      timeout=150         testerId=0
+    Write Line To Uart          export ROS_DOMAIN_ID=0                         testerId=0
+    Wait For Prompt On Uart     root@zedboard-zynq7:~#      timeout=150         testerId=0
+    Write Line To Uart          export RMW_IMPLEMENTATION=rmw_fastrtps_cpp      testerId=0
+    Wait For Prompt On Uart     root@zedboard-zynq7:~#      timeout=150         testerId=0
+    Write Line To Uart          ros2 run subscriber subscriber_node             testerId=0
+    Wait For Line On Uart       Got from                    150                  testerId=0    treatAsRegex=true

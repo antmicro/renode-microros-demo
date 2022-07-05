@@ -1,0 +1,36 @@
+using sysbus
+mach create "zynq"
+machine LoadPlatformDescription @platforms/cpus/zynq-7000.repl
+machine LoadPlatformDescriptionFromString 'virtio: Storage.VirtIOBlockDevice @ sysbus 0x4000f000 { IRQ -> gic@65}'
+sysbus Redirect 0xC0000000 0x0 0x10000000
+
+showAnalyzer sysbus.uart0
+showAnalyzer sysbus.uart1
+
+ttc0 SetFrequency 0 33333333
+ttc0 SetFrequency 1 33333333
+ttc0 SetFrequency 2 33333333
+ttc1 SetFrequency 0 33333333
+ttc1 SetFrequency 1 33333333
+ttc1 SetFrequency 2 33333333
+virtio LoadImage $ORIGIN/zynq_micro_ros_agent_rootfs.img  true
+
+macro reset
+"""
+    ### set registers ###
+
+    cpu SetRegisterUnsafe 0 0x000
+    cpu SetRegisterUnsafe 1 0xD32 # board id
+    cpu SetRegisterUnsafe 2 0x100 # device tree address
+
+    ### load binaries ###
+    sysbus LoadELF $ORIGIN/zynq-virtio-vmlinux
+    sysbus LoadFdt $ORIGIN/zed.dtb 0x100 "console=/dev/ttyPS0,115200 root=/dev/vda rw earlyprintk"
+
+"""
+
+runMacro $reset
+emulation CreateUARTHub "uartHub"
+emulation CreateUARTHub "uartHub2"
+connector Connect sysbus.uart0 uartHub
+connector Connect sysbus.uart1 uartHub2
