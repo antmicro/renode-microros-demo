@@ -19,17 +19,5 @@ cd firmware/zephyr_apps/microros_extensions/
 sed 's/.*{.fd = 0};.*/    static zephyr_transport_params_t default_params = {.fd = 1};/' microros_transports.h -i
 cd ../../../
 ros2 run micro_ros_setup build_firmware.sh
-mkdir agent_ws
-cd agent_ws
-ros2 run micro_ros_setup create_agent_ws.sh
-ros2 run micro_ros_setup build_agent.sh
-source install/local_setup.bash
+/usr/bin/cp -f ./firmware/build/zephyr/zephyr.elf ../renode
 cd ..
-mkdir ros2_ws
-cd ros2_ws
-mkdir src
-cp -r ../../src/ros2-sensor-subscriber src/
-colcon build
-cd ..
-cd ..
-cp microros_ws_renode-micro-ros-demo/firmware/build/zephyr/zephyr.elf ./renode
